@@ -16,11 +16,14 @@ const galleryEl = document.querySelector('div.gallery');
 const loadMoreBtnEl = document.querySelector('.load-more');
 
 let numberOfPage = 1;
+let searchQuery = '';
+
+loadMoreBtnEl.addEventListener('click', onLoadMoreBtnClick);
 
 formEl.addEventListener('submit', onSearch);
 async function onSearch(event) {
   event.preventDefault();
-  const searchQuery = event.currentTarget.elements.searchQuery.value;
+  searchQuery = event.currentTarget.elements.searchQuery.value;
   
   getPictures(searchQuery);
   console.log(searchQuery);
@@ -34,4 +37,8 @@ async function getPictures(searchQuery) {
   } catch (error) {
     console.error(error);
   }
+}
+
+async function onLoadMoreBtnClick() {
+  getPictures(searchQuery);
 }
