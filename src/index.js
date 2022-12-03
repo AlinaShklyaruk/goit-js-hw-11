@@ -33,6 +33,8 @@ async function onSearch(event) {
 async function getPictures(searchQuery) {
   try {
     const response = await axios.get(`${BASE_URL}?key=${KEY_API}&q=${searchQuery}&image_type=photo&orientation=hotizontal&safesearch=true&per_page=40&page=${numberOfPage}`);
+    console.log(response.data);
+    return response.data;
     console.log(response);
   } catch (error) {
     console.error(error);
@@ -40,5 +42,29 @@ async function getPictures(searchQuery) {
 }
 
 async function onLoadMoreBtnClick() {
+  numberOfPage += 1;
   getPictures(searchQuery);
+  if (numberOfPage === totalHits) {
+    Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+  }
+}
+
+function createPicturesMarkup(pictures) {
+  return pictures.map((picture) => `<li class="gallery-item"><div class="photo-card">
+  <img src="${picture.webformatURL}" alt="${picture.tags}" loading="lazy" />
+  <div class="info">
+    <p class="info-item">
+      <b>Likes</b> ${picture.likes}
+    </p>
+    <p class="info-item">
+      <b>Views</b> ${picture.views}
+    </p>
+    <p class="info-item">
+      <b>Comments</b> ${picture.hits.comments}
+    </p>
+    <p class="info-item">
+      <b>Downloads</b> ${picture.downloads}
+    </p>
+  </div>
+</div></li>`).join("");
 }
